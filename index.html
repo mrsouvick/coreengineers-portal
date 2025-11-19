@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>CoreEngineers Hub - Student Login</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
         body { 
             font-family: Arial; 
@@ -38,6 +40,7 @@
         
         <div id="error-message" style="color: red; display: none;"></div>
     </div>
+<div id="g_id_signin"></div>
 
     <!-- Google Sign-In SDK -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -55,6 +58,29 @@
             // Redirect to dashboard
             window.location.href = 'dashboard.html';
         }
+        const CLIENT_ID = "YOUR_CLIENT_ID.apps.googleusercontent.com";
+
+window.onload = () => {
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: handleCredentialResponse
+  });
+
+  google.accounts.id.renderButton(
+    document.getElementById("g_id_signin"),
+    { theme: "outline", size: "large" }  // styling options
+  );
+
+  // optionally show one-tap
+  // google.accounts.id.prompt();
+};
+
+function handleCredentialResponse(response) {
+  // response.credential contains the ID token (JWT)
+  // send it to your server to verify or decode client-side
+  console.log("ID token:", response.credential);
+}
+
     </script>
 </body>
 </html>
