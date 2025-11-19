@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard - CoreEngineers Hub</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 0; 
+            background: #f5f5f5; 
+        }
+        .header { 
+            background: #1a73e8; 
+            color: white; 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .profile-section { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+        }
+        .profile-pic { 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid #1a73e8; 
+        }
+        .courses { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px; 
+            border-radius: 10px; 
+        }
+        .course-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        button { 
+            background: #1a73e8; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>CoreEngineers Hub - Student Portal</h2>
+        <button onclick="signOut()">Sign Out</button>
+    </div>
+
+    <div class="profile-section">
+        <img id="profileImage" class="profile-pic" src="" alt="Profile Picture">
+        <h3 id="studentName"></h3>
+        <p id="studentEmail"></p>
+        <input type="file" id="photoUpload" accept="image/*">
+        <button onclick="uploadPhoto()">Update Photo</button>
+    </div>
+
+    <div class="courses">
+        <h3>Your Course Materials</h3>
+        
+        <div class="course-card">
+            <h4>Electronics & Communication Engineering</h4>
+            <button onclick="showMaterials('ECE')">View Materials</button>
+        </div>
+        
+        <div class="course-card">
+            <h4>Electrical Engineering</h4>
+            <button onclick="showMaterials('EE')">View Materials</button>
+        </div>
+        
+        <div class="course-card">
+            <h4>Mechanical Engineering</h4>
+            <button onclick="showMaterials('ME')">View Materials</button>
+        </div>
+        
+        <div class="course-card">
+            <h4>Civil Engineering</h4>
+            <button onclick="showMaterials('CE')">View Materials</button>
+        </div>
+    </div>
+
+    <script>
+        // Load student data
+        document.getElementById('studentName').textContent = 
+            localStorage.getItem('student_name') || 'Student';
+        document.getElementById('studentEmail').textContent = 
+            localStorage.getItem('student_email') || '';
+        document.getElementById('profileImage').src = 
+            localStorage.getItem('student_photo') || 'default-avatar.png';
+
+        function uploadPhoto() {
+            const fileInput = document.getElementById('photoUpload');
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('custom_photo', e.target.result);
+                    document.getElementById('profileImage').src = e.target.result;
+                    alert('Profile photo updated!');
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        function showMaterials(branch) {
+            alert(`Showing materials for ${branch} branch\n\nThis will display:\n- Lecture videos\n- Handwritten notes\n- Solved questions\n- Previous year suggestions\n\n(Content from your CoreEngineers Hub channel)`);
+            // In future, you can redirect to branch-specific page
+        }
+
+        function signOut() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
