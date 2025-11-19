@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>CoreEngineers Hub - Student Login</title>
+
+    <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
@@ -25,62 +27,47 @@
             color: #1a73e8; 
             margin-bottom: 20px; 
         }
-        .g-signin2 { 
-            margin: 20px 0; 
-        }
     </style>
 </head>
 <body>
+
     <div class="login-container">
         <div class="logo">CoreEngineers Hub</div>
         <h3>Student Portal Login</h3>
         <p>Sign in with your Google account</p>
-        
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        
-        <div id="error-message" style="color: red; display: none;"></div>
-    </div>
-<div id="g_id_signin"></div>
 
-    <!-- Google Sign-In SDK -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <!-- Google Signin Button -->
+        <div id="g_id_signin"></div>
+    </div>
+
     <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            var id_token = googleUser.getAuthResponse().id_token;
-            
-            // Store user data temporarily
-            localStorage.setItem('student_name', profile.getName());
-            localStorage.setItem('student_email', profile.getEmail());
-            localStorage.setItem('student_photo', profile.getImageUrl());
-            localStorage.setItem('google_token', id_token);
-            
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
-        }
         const CLIENT_ID = "148906381996-dnrf4mve59o26toi20c6l9aaieph4d4s.apps.googleusercontent.com";
 
-window.onload = () => {
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleCredentialResponse
-  });
+        window.onload = () => {
+            google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse
+            });
 
-  google.accounts.id.renderButton(
-    document.getElementById("g_id_signin"),
-    { theme: "outline", size: "large" }  // styling options
-  );
+            google.accounts.id.renderButton(
+                document.getElementById("g_id_signin"),
+                { theme: "outline", size: "large" }
+            );
+        };
+        
+        function handleCredentialResponse(response) {
+            // Decode JWT token to get user info
+            const data = JSON.parse(atob(response.credential.split('.')[1]));
 
-  // optionally show one-tap
-  // google.accounts.id.prompt();
-};
+            // Save user info
+            localStorage.setItem("student_name", data.name);
+            localStorage.setItem("student_email", data.email);
+            localStorage.setItem("student_photo", data.picture);
 
-function handleCredentialResponse(response) {
-  // response.credential contains the ID token (JWT)
-  // send it to your server to verify or decode client-side
-  console.log("ID token:", response.credential);
-}
-
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
+        }
     </script>
+
 </body>
 </html>
